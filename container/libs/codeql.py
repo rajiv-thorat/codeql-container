@@ -4,6 +4,7 @@ from zipfile import ZipFile
 from libs.utils import *
 from logging import getLogger
 from libs.github import get_latest_github_repo_version
+import random, string
 
 logger = getLogger('codeql-container')
 
@@ -89,7 +90,9 @@ class CodeQL:
         self.execute_codeql_command(f' query compile --search-path {self.CODEQL_HOME} {self.CODEQL_HOME}/codeql-repo/*/ql/src/codeql-suites/*.qls')
 
     def execute_codeql_command(self, args):
-        ret_string = check_output_wrapper(f'{self.CODEQL_HOME}/codeql/codeql {args}', shell=True)
+        letters = string.ascii_lowercase
+        randomized_string = ''.join(random.choice(letters) for i in range(10))
+        ret_string = check_output_wrapper(f'/bin/time -o /opt/results/non_exec_metrics_{randomized_string}.txt {self.CODEQL_HOME}/codeql/codeql {args}', shell=True)
         if ret_string is CalledProcessError:
             logger.error("Could not run codeql command")
             exit(self.ERROR_EXECUTING_CODEQL)

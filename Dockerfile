@@ -33,7 +33,8 @@ RUN adduser --home ${CODEQL_HOME} ${USERNAME} && \
         rsync \
     	file \
         dos2unix \
-    	gettext && \
+    	gettext \
+        time && \
         apt-get clean && \
         rm -f /usr/bin/python /usr/bin/pip && \
         ln -s /usr/bin/python3.8 /usr/bin/python && \
